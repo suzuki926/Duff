@@ -1,4 +1,6 @@
 from fastapi import FastAPI, HTTPException, Depends
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from sqlmodel import Session, select
 from .models import Product
 from .database import init_db, get_session
@@ -6,6 +8,13 @@ from .database import init_db, get_session
 app = FastAPI(title="Duff Digital Product Passport")
 
 init_db()
+
+app.mount("/frontend", StaticFiles(directory="frontend", html=True), name="frontend")
+
+
+@app.get("/")
+def root():
+    return RedirectResponse(url="/frontend")
 
 
 @app.post("/products", response_model=Product)

@@ -25,6 +25,9 @@ uvicorn src.app:app --reload
 
 This starts the API server at `http://localhost:8000`.
 
+Open that URL in your browser to access a simple front-end. The page lets you
+add products and lists the existing ones by calling the API.
+
 ## Tests
 
 Run the tests with:
