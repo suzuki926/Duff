@@ -29,3 +29,36 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
 });
 
 fetchProducts();
+
+async function fetchRequests() {
+  const res = await fetch('/requests');
+  const requests = await res.json();
+  const list = document.getElementById('requests');
+  list.innerHTML = '';
+  requests.forEach(r => {
+    const li = document.createElement('li');
+    const urls = r.urls.map(u => `<a href="/requests/${r.id}?url=${u.url}">${u.url}</a>`).join(', ');
+    li.innerHTML = `#${r.id} (tier ${r.tier}) - ${r.content} - URLs: ${urls} <button data-id="${r.id}">Escalate</button>`;
+    list.appendChild(li);
+  });
+  document.querySelectorAll('#requests button').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      await fetch(`/requests/${btn.dataset.id}/escalate`, { method: 'POST' });
+      fetchRequests();
+    });
+  });
+}
+
+document.getElementById('request-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const payload = { content: document.getElementById('content').value };
+  await fetch('/requests', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  e.target.reset();
+  fetchRequests();
+});
+
+fetchRequests();

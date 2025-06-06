@@ -26,7 +26,9 @@ uvicorn src.app:app --reload
 This starts the API server at `http://localhost:8000`.
 
 Open that URL in your browser to access a simple front-end. The page lets you
-add products and lists the existing ones by calling the API.
+add products and lists the existing ones by calling the API. It also lets you
+create supplier requests and escalate them across tiers if unanswered. Each
+escalation generates a new tracking URL which is shown in the request list.
 
 ## Tests
 
